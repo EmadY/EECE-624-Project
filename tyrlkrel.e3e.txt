@@ -1,0 +1,9 @@
+﻿Added helper and test functions. Implemented main() so as to better allow testing and comparison.
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Changes to be committed:
+#	modified:   CodeFiles/main.cpp
+#
+
