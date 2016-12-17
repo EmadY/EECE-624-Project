@@ -7,6 +7,7 @@
 #include <random>
 #include <stack>
 #include <functional>
+#include <fstream>
 #define vs std::vector<string>
 
 using namespace std;
@@ -24,57 +25,99 @@ inline string create_equal(const string& s1, const string& s2);
 
 void brute_force_reduce(vs&);
 void join2_reduce(vs&);
+void mult_join2_reduce(vs&);
 void trie_reduce(vs&); // TODO(emad): implement
 
 void reduce_to_unique(vs&);
 void seperate_vectors(const vs&, vs&, vs&);
 bool check_correct_reduce(const vs&, const vs&);
+int get_min_cover(const vs&, vs&, int);
 
 void print_vector(const vs&);
 void delete_trie(TrieNode*);
+inline bool bit(int, int);
+
+const bool USE_BRUTE_FORCE = true; // minimize start time when brute force not required
+const int DP_LEN = USE_BRUTE_FORCE ? 33554432 : 10;
+int DP[DP_LEN]; // dp for brute force method
+vs DPvs[DP_LEN];
 
 int main() {
+    // Note: to reduce startup time when you DO NOT want to test brute force
+    // set USE_BRUTE_FORCE to false above.
+
     std::srand ( unsigned ( std::time(0) ) );
 
-    int c; cin >> c; vs V(c);
-    for(int i = 0; i < c; i++) cin >> V[i];
-    reduce_to_unique(V);
+    bool custom_in = false; // change if you want to test on a specific vector
 
-    vector< function<void(vs&)> > functions;
-    vector< vs > vectors;
-    vector<bool> check_reduce;
+    vector< vs > V;
 
-    // For each method, add a copy of V to vectors (vs(V)), and a boolean that
-    // controls whether this method will be tested. Finally add the function to
-    // test using the same syntax as below.
-    // Set the boolean of the function you want to test to true and rest to false,
-    // unless you want to compare.
-
-    // join2_reduce
-    vectors.push_back(vs(V)); check_reduce.push_back(true);
-    functions.push_back(bind(&join2_reduce, _1));
-
-    // trie_reduce
-    vectors.push_back(vs(V)); check_reduce.push_back(false); // not implemented. don't set to true.
-    functions.push_back(bind(&trie_reduce, _1));
-
-
-
-    bool display_results = true; // set to true if you want to see the reduced set.
-    for(int i = 0; i < functions.size(); i++){
-        if(!check_reduce[i]) continue;
-        clock_t begin_clock = clock();
-        functions[i](vectors[i]);
-        clock_t end_clock = clock();
-        bool correct_answer = check_correct_reduce(vectors[i], V);
-        cout << "Function " << i+1 << " gave a " <<  (correct_answer ? "correct" : "wrong")
-             << " reduced set. The reduced set had a size of " << vectors[i].size() << "."
-             <<" The code ran in " << double(end_clock - begin_clock) / CLOCKS_PER_SEC
-             << "s." << endl;
-        if(display_results){
-            cout << endl << "Reduced set is:" << endl;
-            print_vector(vectors[i]);
+    if(custom_in){
+        int c; cin >> c; V.push_back(vs(c));
+        for(int i = 0; i < c; i++) cin >> V[0][i];
+    } else {
+        ifstream in; in.open("data.txt");
+        while(true){
+            int c; in >> c; if(c == 0) break;
+            V.push_back(vs(c));
+            for(int i = 0; i < c; i++) in >> V[V.size()-1][i];
         }
+    }
+
+    for(int vi = 0; vi < V.size(); vi++){
+
+        reduce_to_unique(V[vi]);
+
+        vector< function<void(vs&)> > functions;
+        vector< vs > vectors;
+        vector<bool> check_reduce;
+        vs function_name;
+
+        // For each method, add a copy of V to vectors (vs(V)), and a boolean that
+        // controls whether this method will be tested. Finally add the function to
+        // test using the same syntax as below.
+        // Set the boolean of the function you want to test to true and rest to false,
+        // unless you want to compare.
+
+        // brute_force_reduce
+        vectors.push_back(vs(V[vi])); check_reduce.push_back(true);
+        functions.push_back(bind(&brute_force_reduce, _1));
+        function_name.push_back("Brute Force");
+
+        // join2_reduce
+        vectors.push_back(vs(V[vi])); check_reduce.push_back(true);
+        functions.push_back(bind(&join2_reduce, _1));
+        function_name.push_back("Join2 Reduce");
+
+        //mult_join2_reduce
+        vectors.push_back(vs(V[vi])); check_reduce.push_back(true);
+        functions.push_back(bind(&mult_join2_reduce, _1));
+        function_name.push_back("Multiple Join2");
+
+
+        // trie_reduce
+        vectors.push_back(vs(V[vi])); check_reduce.push_back(false); // not implemented. don't set to true.
+        functions.push_back(bind(&trie_reduce, _1));
+        function_name.push_back("Trie Reduce");
+
+
+        bool display_results = false; // set to true if you want to see the reduced set.
+        for(int i = 0; i < functions.size(); i++){
+            if(!check_reduce[i]) continue;
+            clock_t begin_clock = clock();
+            functions[i](vectors[i]);
+            clock_t end_clock = clock();
+            bool correct_answer = check_correct_reduce(V[vi], vectors[i]);
+            cout << "Function :'" << function_name[i] << "'. Verdict : " <<  (correct_answer ? "Yes" : "No")
+                 << ". Size : " << vectors[i].size() << ". Time: "
+                 << double(end_clock - begin_clock) / CLOCKS_PER_SEC << "s." << endl;
+            if(display_results){
+                cout << endl << "Reduced set is:" << endl;
+                print_vector(vectors[i]);
+            }
+        }
+
+        cout << endl;
     }
 
     return 0;
@@ -106,13 +149,109 @@ inline string create_equal(const string& s1, const string& s2){
 }
 
 /*
+Brute force method. Will find optimal set, but will take a long time.
+complexity is n^2*2^n.
+Requires (and is mainly implemented in) helper function get_min_cover()
+*/
+void brute_force_reduce(vs& V){
+    // more than 20 will take too much time, so just skip.
+    if(V.size() > 25) {V = vs(); return;}
+
+    int start_dpv = 0;
+    for(int i = 0; i < V.size(); i++) start_dpv = start_dpv*2 + 1;
+
+    fill(&DP[0], &DP[0] + start_dpv + 1, -1);
+
+
+    vs Vc(V);
+    get_min_cover(Vc, V, start_dpv);
+}
+
+/*
+Gets the minimum number of vectors required to cover all the input vectors.
+The input vectors are determined by V and dpv:
+    if bit i of dpv is 1, then V[i] is in the input, otherwise it's not.
+the cover is returned in cover.
+Uses memoization. memoized in DP.
+*/
+int get_min_cover(const vs& V, vs& cover, int dpv){
+    //cout << "called: " << dpv << endl;
+    if(dpv == 0) {cover = vs(); return 0;}
+    if(DP[dpv] != -1) {cover = DPvs[dpv]; return DP[dpv]; }
+    int rem_vs = 0;
+    cover = vs();
+    for(int i = 0; i < V.size() && rem_vs < 2; i++)
+    {
+        if(!bit(dpv, i)) continue;
+        rem_vs++;
+        cover.push_back(V[i]);
+    }
+    if(rem_vs == 1) return 1;
+    cover = vs();
+
+    // Get all pairs of vectors that 'can_equate'. Try all other vectors and see
+    // if they can be added to the two we found above. When done, remove from dpv
+    // and call with new dpv.
+    //
+    // Use the set that returned the minimum dpv when returning (vs = created set +
+    // vs returned by next call).
+    //
+    // If we can not find any pairs, then we are done, return ans = number of input
+    // vectors, and vs = input vectors.
+    //
+    // Base case was handled above: 0 or 1 in input only remaining.
+
+    bool found = false;
+    vs best = vs(); int min_v = 1000; string best_eq_str;
+
+    for(int i = 0; i < V.size(); i++) {
+        if(!bit(dpv,i)) continue;
+        for(int j = i+1; j < V.size(); j++) {
+            if(!bit(dpv,j)) continue;
+            string eq_string;
+            if(!can_equate(V[i], V[j])) continue; // we only want compatible strings
+            eq_string = create_equal(V[i], V[j]);
+
+            int to_sub = (1 << i) + (1 << j); // to be able to change dpv
+
+            // loop over all other numbers, see if we can find any that want to join.
+            for(int k = 0; k < V.size(); k++){
+                if(k == i || k == j) continue;
+                if(!bit(dpv, k)) continue;
+                if(!can_equate(V[k], eq_string)) continue;
+                eq_string = create_equal(V[k], eq_string);
+                to_sub += (1 << k);
+            }
+
+            vs ret_cover;
+            int ret_cover_size = get_min_cover(V, ret_cover, dpv-to_sub);
+            if(!found) found = true;
+            if(ret_cover_size < min_v){
+                best = ret_cover; min_v = ret_cover_size; best_eq_str = eq_string;
+            }
+        }
+    }
+
+    if(!found) {
+        for(int i = 0; i < V.size(); i++) if(bit(dpv, i)) best.push_back(V[i]);
+    } else {
+        best.push_back(best_eq_str);
+    }
+
+    cover = best;
+    DPvs[dpv] = cover;
+    DP[dpv] = cover.size();
+    //cout << "returned: " << dpv << " w/ result: " << cover.size() << endl;
+
+    return DP[dpv];
+}
+
+/*
 Works by taking all N elemnts, and trying to join any two together.
 To avoid unintentional bias, everytime we find an answer, we shuffle
 the now reduced vector and go aagin.
 */
 void join2_reduce(vs& V){
-
-
     vs next = V;
     vs curr;
     while(true){
@@ -138,6 +277,24 @@ void join2_reduce(vs& V){
     }
     V = curr;
 }
+
+/*
+* similiar concept to join2 reduce, except that
+* it is done multiuple times with different starting permutations, as the position
+* and identity of starting elemnts directly affects the output. Maintains which
+* permutation lead to best output and uses that.
+*/
+void mult_join2_reduce(vs& V){
+    vs best(V.size());
+    for(int i = 0; i < V.size(); i++){
+        random_shuffle(V.begin(), V.end());
+        vs Vc(V);
+        join2_reduce(Vc);
+        if(Vc.size() < best.size()) best = Vc;
+    }
+    V = best;
+}
+
 
 /*
 Start with all elements that do not contain don't cares. Add them to a trie.
@@ -198,6 +355,7 @@ Used for testing purposes. O(n^2) complexity
 bool check_correct_reduce(const vs& initial, const vs& reduced){
     for(int i = 0; i < initial.size(); i++){
         for(int j = 0; j < reduced.size()+1; j++){
+            //if(j == reduced.size()) cout << "the breaker " << initial[i] << endl;
             if(j == reduced.size()) return false;
             if(can_equate(initial[i], reduced[j]) && (reduced[j] == create_equal(initial[i], reduced[j])))
                 break;
@@ -226,4 +384,11 @@ void delete_trie(TrieNode* head){
         if(tn->child[1] != nullptr) rem.push(tn->child[1]);
         delete tn;
     }
+}
+
+/*
+Gets the bit at position i of n.
+*/
+inline bool bit(int n, int i){
+    return (n >> i) & 1;
 }
