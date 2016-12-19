@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <set>
+#include <unordered_set>
 #include <algorithm>
 #include <ctime>
 #include <cstdlib>
@@ -9,7 +10,6 @@
 #include <functional>
 #include <fstream>
 #define vs std::vector<string>
-
 using namespace std;
 using std::placeholders::_1;
 
@@ -32,7 +32,8 @@ void reduce_to_unique(vs&);
 void seperate_vectors(const vs&, vs&, vs&);
 bool check_correct_reduce(const vs&, const vs&);
 int get_min_cover(const vs&, vs&, int);
-
+void greddy_reduce(vs&);
+int get_min(std::vector<int>&);
 void print_vector(const vs&);
 void delete_trie(TrieNode*);
 inline bool bit(int, int);
@@ -265,7 +266,8 @@ void join2_reduce(vs& V){
         for(int i = 0; i < curr.size() && (next.size() == curr.size()); i++){
             for(int j = i+1; j < curr.size(); j++){
                 if(can_equate(curr[i], curr[j])){
-                    //cout << "Detected " << curr[i] << " " << curr[j] << " equates to " << create_equal(curr[i], curr[j]) << endl;
+                    //cout << "Detected " << curr[i] << " " << curr[j] << " equates to " 
+                    //<< create_equal(curr[i], curr[j]) << endl;
                     next[i] = create_equal(curr[i], curr[j]);
                     next.erase(next.begin() + j);
                     break;
@@ -376,6 +378,69 @@ void print_vector(const vs& V){
     cout << endl;
 }
 
+void greddy_reduce(vs& V) {
+    std::vector<std::vector<int>> adj(V.size());
+    for (int i = 0; i < V.size(); i++) {
+        std::vector<int> temp;
+        adj[i] = temp;
+    }
+    for (int i = 0; i < V.size(); i++) {
+        for (int j = i+1; j < V.size(); j++) {
+            if (can_equate(V[i], V[j])) {
+                adj[i].push_back(j);
+                adj[j].push_back(i);
+            }
+        }
+    }
+    std::vector<int> degrees(V.size());
+    for (int i = 0; i < V.size(); i++) {
+        degrees[i] = adj[i].size();
+    }
+    int n = V.size();
+    unordered_set<int> removed;
+    vs result;
+    while (true) {
+        int min = get_min(degrees);
+        if (min == 1e9)
+            break;
+        removed.insert(min);
+        if (degrees[min] != 0) {
+            // NEEDS WORK
+            int node_to_remove;//pick some node
+            removed.insert(node_to_remove);
+            result.push_back(create_equal(V[min], V[node_to_remove]));
+        } else {
+            result.push_back(V[min]);
+        }
+        degrees[min] = 1e9;
+        for (int i = 0; i < V.size(); i++) {
+            if (degrees[i] != 1e9) {
+                int count = 0;
+                for (int j = 0; j < adj[i].size(); j++) {
+                    if (removed.find(j) == removed.end()) {
+                        count++;
+                    }
+                }
+                degrees[i] = count;
+            }
+        }
+    }
+    V = result;
+}
+
+int get_min(std::vector<int>& degrees) {
+    int min = degrees[0];
+    int ind = 0;
+    for (int i = 1; i < degrees.size(); i++) {
+        if (degrees[i] < min) {
+            min = degrees[i];
+            ind = i;
+        }
+    }
+    if (min == 1e9)
+        return -1;
+    return ind;
+}
 /*
 Deletes a trie given the trie head and avoids dangling pointers.
 Note that this assumes that the trie is valid and will crash otherwise.
