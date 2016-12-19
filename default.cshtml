@@ -1,17 +1,3 @@
-@using System;
-@using System.Diagnostics;
-@using System.ComponentModel;
-@{
-
-System.Diagnostics.Process process = new System.Diagnostics.Process();
-System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-startInfo.FileName = "cmd.exe";
-startInfo.Arguments = "g++ CodeFiles/main.cpp -o run -std=c++11 && ./run";
-process.StartInfo = startInfo;
-process.Start();
-}
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
@@ -159,7 +145,7 @@ process.Start();
 														        </div>
 
 
-<style>th {width: 16%; }</style>
+														<style>th {width: 16%; }</style>
 
 																		<table style="width:85%; margin-right: 7%; margin-left: 7%;float: left;">
 																		  <tr>

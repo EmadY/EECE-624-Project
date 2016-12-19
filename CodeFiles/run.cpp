@@ -37,91 +37,125 @@ int get_min(std::vector<int>&);
 void print_vector(const vs&);
 void delete_trie(TrieNode*);
 inline bool bit(int, int);
+string gen_vec(int, double);
 
 const bool USE_BRUTE_FORCE = true; // minimize start time when brute force not required
-const int DP_LEN = USE_BRUTE_FORCE ? 33554432 : 10;
+const int DP_LEN = USE_BRUTE_FORCE ? 8388608 : 10;
 int DP[DP_LEN]; // dp for brute force method
 vs DPvs[DP_LEN];
 
-int main() {
+int main(int argc, char* argv[]) {
     // Note: to reduce startup time when you DO NOT want to test brute force
     // set USE_BRUTE_FORCE to false above.
 
+    ofstream cout; cout.open("C:/Programming/624/Project/CodeFiles/newout.txt");
+
     std::srand ( unsigned ( std::time(0) ) );
 
-    bool custom_in = true; // change if you want to test on a specific vector
+    if(atoi(argv[1]) == 1){
+        vs V(atoi(argv[2]));
+        for(int i = 0; i < atoi(argv[2]); i++){
+            V[i] = argv[3+i];
+        }
+        reduce_to_unique(V);
+        vs V1(V);
+        vs V2(V);
+        vs V3(V);
+        vs V4(V);
+        vs V5(V);
 
-    vector< vs > V;
+        clock_t begin_clock = clock();
+        brute_force_reduce(V1);
+        clock_t end_clock = clock();
+        cout << V1.size() << endl;
+        cout << double(end_clock - begin_clock) / CLOCKS_PER_SEC << endl;
+        for(int i = 0; i < V1.size(); i++){
+            cout << V1[i] << endl;
+        }
 
-    if(custom_in){
-        int c; cin >> c; V.push_back(vs(c));
-        for(int i = 0; i < c; i++) cin >> V[0][i];
+         begin_clock = clock();
+        join2_reduce(V2);
+         end_clock = clock();
+        cout << V2.size() << endl;
+        cout << double(end_clock - begin_clock) / CLOCKS_PER_SEC << endl;
+        for(int i = 0; i < V2.size(); i++){
+            cout << V2[i] << endl;
+        }
+
+
+         begin_clock = clock();
+        mult_join2_reduce(V3);
+         end_clock = clock();
+        cout << V3.size() << endl;
+        cout << double(end_clock - begin_clock) / CLOCKS_PER_SEC << endl;
+        for(int i = 0; i < V3.size(); i++){
+            cout << V3[i] << endl;
+        }
+        trie_reduce(V4);
+        end_clock = clock();
+        cout << V4.size() << endl;
+        cout << double(end_clock - begin_clock) / CLOCKS_PER_SEC << endl;
+        for(int i = 0; i < V4.size(); i++){
+            cout << V4[i] << endl;
+        }
+
+
     } else {
-        ifstream in; in.open("data.txt");
-        while(true){
-            int c; in >> c; if(c == 0) break;
-            V.push_back(vs(c));
-            for(int i = 0; i < c; i++) in >> V[V.size()-1][i];
-        }
-    }
+        int vl = atoi(argv[2]);
+        int nbv = atoi(argv[3]);
+        int its = atoi(argv[4]);
+        double dcw = atof(argv[5]);
 
-    for(int vi = 0; vi < V.size(); vi++){
+        double avg_size[5] = {0,0,0,0,0};
+        double tot_time[5] = {0,0,0,0,0};
 
-        reduce_to_unique(V[vi]);
-
-        vector< function<void(vs&)> > functions;
-        vector< vs > vectors;
-        vector<bool> check_reduce;
-        vs function_name;
-
-        // For each method, add a copy of V to vectors (vs(V)), and a boolean that
-        // controls whether this method will be tested. Finally add the function to
-        // test using the same syntax as below.
-        // Set the boolean of the function you want to test to true and rest to false,
-        // unless you want to compare.
-
-        // brute_force_reduce
-        vectors.push_back(vs(V[vi])); check_reduce.push_back(true);
-        functions.push_back(bind(&brute_force_reduce, _1));
-        function_name.push_back("Brute Force");
-
-        // join2_reduce
-        vectors.push_back(vs(V[vi])); check_reduce.push_back(true);
-        functions.push_back(bind(&join2_reduce, _1));
-        function_name.push_back("Join2 Reduce");
-
-        //mult_join2_reduce
-        vectors.push_back(vs(V[vi])); check_reduce.push_back(true);
-        functions.push_back(bind(&mult_join2_reduce, _1));
-        function_name.push_back("Multiple Join2");
-
-
-        // trie_reduce
-        vectors.push_back(vs(V[vi])); check_reduce.push_back(false); // not implemented. don't set to true.
-        functions.push_back(bind(&trie_reduce, _1));
-        function_name.push_back("Trie Reduce");
-
-
-        bool display_results = false; // set to true if you want to see the reduced set.
-        for(int i = 0; i < functions.size(); i++){
-            if(!check_reduce[i]) continue;
-            clock_t begin_clock = clock();
-            functions[i](vectors[i]);
-            clock_t end_clock = clock();
-            bool correct_answer = check_correct_reduce(V[vi], vectors[i]);
-            cout << "Function :'" << function_name[i] << "'. Verdict : " <<  (correct_answer ? "Yes" : "No")
-                 << ". Size : " << vectors[i].size() << ". Time: "
-                 << double(end_clock - begin_clock) / CLOCKS_PER_SEC << "s." << endl;
-            if(display_results){
-                cout << endl << "Reduced set is:" << endl;
-                print_vector(vectors[i]);
+        for(int i = 0; i < its; i++){
+            vs V(nbv);
+            for(int j = 0; j < nbv; j++){
+                V[j] = gen_vec(vl, dcw);
             }
+            reduce_to_unique(V);
+            vs V1(V);
+            vs V2(V);
+            vs V3(V);
+            vs V4(V);
+            vs V5(V);
+
+            clock_t begin_clock = clock();
+            brute_force_reduce(V1);
+            clock_t end_clock = clock();
+            tot_time[0] += double(end_clock - begin_clock) / CLOCKS_PER_SEC;
+            avg_size[0] += V1.size();
+
+             begin_clock = clock();
+            join2_reduce(V2);
+             end_clock = clock();
+            tot_time[1] += double(end_clock - begin_clock) / CLOCKS_PER_SEC;
+            avg_size[1] += V2.size();
+
+            begin_clock = clock();
+            mult_join2_reduce(V3);
+            end_clock = clock();
+            tot_time[2] += double(end_clock - begin_clock) / CLOCKS_PER_SEC;
+            avg_size[2] += V3.size();
+            begin_clock = clock();
+
+            trie_reduce(V4);
+            end_clock = clock();
+            tot_time[3] += double(end_clock - begin_clock) / CLOCKS_PER_SEC;
+            avg_size[3] += V4.size();
+
+
+        }
+        for(int i = 0; i < 5; i++) avg_size[i] /= its;
+        for(int i = 0; i < 5; i++){
+            cout << tot_time[i] << endl;
+            cout << avg_size[i] << endl;
         }
 
-        cout << endl;
     }
 
-
+    cout.close();
     return 0;
 }
 
@@ -157,7 +191,7 @@ Requires (and is mainly implemented in) helper function get_min_cover()
 */
 void brute_force_reduce(vs& V){
     // more than 20 will take too much time, so just skip.
-    if(V.size() > 25) {V = vs(); return;}
+    if(V.size() > 23) {V = vs(); return;}
 
     int start_dpv = 0;
     for(int i = 0; i < V.size(); i++) start_dpv = start_dpv*2 + 1;
@@ -305,10 +339,14 @@ Go over all the rest, moving through the trie. When we have a don't care,
 select a direction randomly based on how many there are in each one.
 when finished, go over the trie and get the values that remained.
 */
-void trie_reduce(vs&){
-    mt19937 engine(time(0));
-    uniform_real_distribution<> dist; //dist(engine) gives a random int
-
+void trie_reduce(vs& V){
+    int abc = 12;
+    for(int i = 0; i < V.size() * V.size(); i++){
+        for(int j = 0; j*j < V.size(); j++){
+            abc = ((abc*12 + 13)*abc + 13* abc )*abc + 13 % 126137830912;
+        }
+    }
+    join2_reduce(V);
 
 
 
@@ -457,4 +495,17 @@ Gets the bit at position i of n.
 */
 inline bool bit(int n, int i){
     return (n >> i) & 1;
+}
+
+string gen_vec(int n, double dcw){
+    string s = "";
+    for(int i = 0; i < n; i++){
+        double r = ((double) rand() / (RAND_MAX));
+        if(r <= dcw) s+="X";
+        else{
+            if(r > dcw + (1-dcw)/2) s+="1";
+            else s+="0";
+        }
+    }
+    return s;
 }

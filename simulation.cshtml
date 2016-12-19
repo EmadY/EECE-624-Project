@@ -1,0 +1,256 @@
+@using System;
+@using System.Diagnostics;
+@using System.ComponentModel;
+@{
+    string add = "";
+    string[] fout = new string[10];
+    if(IsPost){
+        System.Diagnostics.Process process = new System.Diagnostics.Process();
+        System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+        startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+        add = "2" + " " + Request["vl"] + " " + Request["nv"] + " " + Request["its"] + " " + Request["dcw"];
+        startInfo.FileName = "cmd.exe";
+        startInfo.Arguments = "/C g++ C:/Programming/624/Project/CodeFiles/run.cpp -o C:/Programming/624/Project/run -std=c++11 && C:/Programming/624/Project/run.exe " + add;
+        process.StartInfo = startInfo;
+        process.Start();
+        process.WaitForExit();
+        <text>@process.ExitCode</text>
+        System.IO.StreamReader file = new System.IO.StreamReader("c:/Programming/624/Project/CodeFiles/newout.txt");
+        string line;
+        for(int i = 0; i < 5; i++){
+            fout[i+5] = file.ReadLine();
+            fout[i] = file.ReadLine();
+        }
+        file.Close();
+    }
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+				<title>The Project | EECE 624 Project</title>
+		<meta name="robots" content="all" />
+		<meta name="generator" content="Sandvox 2.10.6" />
+		<meta name="viewport" content="width=960" />
+
+		<link rel="stylesheet" type="text/css" href="sandvox_Blueprint_modern/main.css" title="Blueprint Modern" /><!--[if IE 6]>
+		<link rel="stylesheet" type="text/css" href="sandvox_Blueprint_modern/ie6.css" /><![endif]--><!--[if IE 7]>
+		<link rel="stylesheet" type="text/css" href="sandvox_Blueprint_modern/ie7.css" /><![endif]-->
+		<!--
+		Photo credits for this website's design: <http://455.com/sandvox_Blueprint_modern/Credits.rtf>
+		Licensing for this website's design:     <http://455.com/sandvox_Blueprint_modern/License.rtf>
+		-->
+<script src="tab.js"></script>
+<link rel="stylesheet" type="text/css" href="tab.css">
+
+
+
+	</head>
+	<body class="sandvox has-page-title allow-sidebar no-custom-banner home-page no-IR" id="host_455_com" >
+				<div id="page-container">
+			<div id="page">
+				<div id="page-top" class="no-logo has-title has-tagline">
+					<div id="title">
+						<h1 class="title"><span class="in">EECE 624 Project</span></h1>
+						<p id="tagline"><span class="in">Digital System Testing</span></p>
+					</div><!-- title -->
+					<div id="sitemenu-container">
+						<div id="sitemenu">
+							<h2 class="hidden">Site Navigation<a href="#page-content" rel="nofollow">[Skip]</a></h2>
+							<div id="sitemenu-content">
+								<ul>
+									<li onclick="location.href='default.cshtml';" class="i1 o last-item last currentPage"><span class="in">MainS\</span></li>
+                  <li  onclick = "a.href=#;"class="i1 o last-item last currentPage"><span class="in">Simulation</span></li>
+								</ul>
+							</div> <!-- /sitemenu-content -->
+						</div> <!-- /sitemenu -->
+					</div> <!-- sitemenu-container -->
+				</div> <!-- page-top -->
+				<div class="clear below-page-top"></div>
+				<div id="page-content" class="">
+					<div id="sidebar-container">
+						<div id="sidebar">
+							<div id="sidebar-top"></div>
+							<div id="sidebar-content">
+								<h3 class="hidden">Sidebar<a rel="nofollow" href="#main">[Skip]</a></h3>
+								<div class="pagelet titled i1 o">
+									<h4 class="title pagelet-title"><span class="in">Project DESCRIPTION</span></h4>
+									<div class="pagelet-body">
+										<div class="RichTextElement">
+											<div>
+												<p><span style="font-size: 11pt; font-family: Calibri; font-weight: 700;">Project 624
+												</span></p>
+												<p><span style="font-size: 11pt; font-family: Calibri;">Here </span></p>
+
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="pagelet titled i3 o last-item">
+									<h4 class="title pagelet-title"><span class="in">Team Members</span></h4>
+									<div class="pagelet-body">
+										<div class="RichTextElement">
+											<div>
+												<p><span style="font-family: Webdings;"><br /></span></p><ul><li><span style="color: rgb(0, 0, 0); font-family: Webdings;">Mohamad-Ali itani</span><ul><li><span style="color: rgb(0, 0, 0); font-family: Webdings;">King of everything member</span></li></ul></li><li><span style="color: rgb(0, 0, 0); font-family: Webdings;">Raad Mohamad Ghazi</span><ul><li><span style="color: rgb(0, 0, 0); font-family: Webdings;">UI design</span></li></ul></li><li><span style="color: rgb(0, 0, 0); font-family: Webdings;">Yehya Emad</span><ul><li><span style="color: rgb(0, 0, 0); font-family: Webdings;">Brogrammer</span></li></ul></li></ul><p><br /></p>
+
+											</div>
+										</div>
+									</div>
+								</div>
+							</div> <!-- sidebar-content -->
+							<div id="sidebar-bottom"></div>
+						</div> <!-- sidebar -->
+					</div> <!-- sidebar-container -->
+					<div id="main">
+						<div id="main-top"></div>
+						<div id="main-content">
+							<h2 class="title"><span class="in">The Project</span></h2>
+							<div class="article">
+								<div class="article-content">
+									<div class="RichTextElement">
+										<div>
+											<div class="first wide center">
+												<div style="" class="graphic">
+													<div class="figure-content HTMLElement">
+
+
+														<!DOCTYPE html>
+
+														<html lang="en">
+														    <head>
+														        <meta charset="utf-8" />
+														        <title>EECE 624 Project</title>
+														        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+														        <link rel="stylesheet" type="text/css" href="mybutton.css"/>
+
+														        <script type="text/javascript">
+
+
+
+														        </script>
+														    </head>
+														    <body>
+														        <div class="poly_type">
+														            <h3 style = "margin-left: 10%; color:#63b8ee;" >Here</h3>
+
+                                        <form action="" method="post">
+
+                                        <fieldset>
+                                          <div>
+                                          <span style="width: 80%; margin-left: 10%; float: left;">
+                                          <label for="Vl">Vector Length	:	</label><input type="text" id="vl" name="vl" size="50" placeholder= "Vector length">
+                                        </span>
+                                        <span style="width: 80%; margin-left: 10%; float: left;">
+                                          <label for="nbV">Number of vectors	:	</label><input type="text" name="nv" size="50" placeholder= "Nb vectors">
+                                        </span>
+                                          <span style="width: 80%; margin-left: 10%; float: left;">
+                                          <label for="It">Iterations : </label><input type="text" name="its" size="50"placeholder= "Iterations">
+                                        </span>
+                                        <span style="width: 80%; margin-left: 10%; float: left;">
+                                        <label for="DW">Don't care weight : </label><input type="text" name="dcw" size="50"placeholder= "DC weights">
+                                      </span>
+
+                                        </div>
+                                          <br/>
+                                          <br/>
+                                          <br/>
+                                          <br/>
+                                          <br/>
+                                          <br/>
+                                          <br/>
+
+
+
+
+                                          <input type="submit" href="#" class="myButton" for="Fillbutton" style="width:80%; margin-left: 10%; float: left; text-align: center; color: #ffffff" value="Simulate"/>
+                                        </fieldset>
+
+                                            </form>
+
+                                        <br/>
+                                        <br/>
+                                        <br/>                                        <br/>
+                                        <br/>
+<style>th {width: 16%; }</style>
+
+																		<table style="width:85%; margin-right: 7%; margin-left: 7%;float: left;">
+																		  <tr>
+																		    <th></th>
+																		    <th>Brute Force</th>
+																		    <th>Join2</th>
+																			<th>Multiple Join2</th>
+																			<th>Tri Reduce</th>
+																			<th>Graph Reduce</th>
+																		  </tr>
+																		  <tr>
+																		    <td>Reduced Set Size</td>
+																		    <td>@fout[0]</td>
+																		    <td>@fout[1]</td>
+																			<td>@fout[2]</td>
+																			<td>@fout[3]</td>
+																			<td>@fout[4]</td>
+																	  	</tr>
+																		  <tr>
+																		    <td>Time to compute result</td>
+																		    <td>@fout[5]</td>
+																		    <td>@fout[6]</td>
+																			<td>@fout[7]</td>
+																			<td>@fout[8]</td>
+																			<td>@fout[9]</td>
+																	  	</tr>
+																		</table>
+
+
+
+
+
+
+
+
+
+
+														        </div>
+
+
+
+														    </body>
+														</html>
+													</div>
+												</div>
+											</div>
+											<p><br /></p>
+
+										</div>
+									</div>
+								</div> <!-- /article-content -->
+								<div class="article-info">
+								</div> <!-- /article-info -->
+							</div> <!-- /article -->
+						</div> <!-- main-content -->
+						<div id="main-bottom"></div>
+					</div> <!-- main -->
+				</div> <!-- content -->
+				<div class="clear below-content"></div>
+				<div id="page-bottom">
+					<div id="page-bottom-contents">
+						<div><br /></div>
+						<div class="hidden"> <a rel="nofollow" href="#title">[Back To Top]</a></div>
+					</div>
+				</div> <!-- page-bottom -->
+			</div> <!-- container -->
+			<div id="extraDiv1"><span></span></div><div id="extraDiv2"><span></span></div><div id="extraDiv3"><span></span></div><div id="extraDiv4"><span></span></div><div id="extraDiv5"><span></span></div><div id="extraDiv6"><span></span></div>
+		</div> <!-- specific body type -->
+		<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+		<script>
+		if (typeof jQuery === 'undefined') document.write('<scr'+'ipt src="_Resources/jquery-1.9.1.min.js"></scr'+'ipt>');
+		</script>
+		<script charset="utf-8" src="sandvox_Blueprint_modern/javascript.js"></script>
+		<script>
+		$(document).ready(function(){var e=window.devicePixelRatio&&window.devicePixelRatio>1?window.devicePixelRatio:1,t=window.innerWidth>window.innerHeight?screen.height:screen.width;$("span[data-img-src-hr]").each(function(){var n=$(this).data("width"),r=$(this).data("height"),i=$(this).data("alt"),s='<img src="',o=e>1&&n<2*t,u=0,a=$(this)[0].attributes;if(o){s+=$(this).data("img-src-hr")}else{s+=$(this).data("img-src")}s+='"';if(i)s+=' alt="'+i+'"';if(n)s+=' width="'+n+'"';if(r)s+=' height="'+r+'"';for(l=a.length;u<l;u++){var f=a[u].name;if(!f.match(/(data-width|data-height|data-alt|data-img-src)/g)){s+=" "+f+'="'+a[u].value+'"'}}s+=" />";$(this).replacewidth($(s))})})
+		</script>
+
+
+	</body>
+</html>
