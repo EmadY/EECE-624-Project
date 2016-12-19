@@ -95,11 +95,16 @@ int main() {
         functions.push_back(bind(&mult_join2_reduce, _1));
         function_name.push_back("Multiple Join2");
 
+        //vectors.push_back(vs(V[vi])); check_reduce.push_back(true);
+        //functions.push_back(bind(&greddy_reduce, _1));
+        //function_name.push_back("gready reduce");
 
         // trie_reduce
         vectors.push_back(vs(V[vi])); check_reduce.push_back(false); // not implemented. don't set to true.
         functions.push_back(bind(&trie_reduce, _1));
         function_name.push_back("Trie Reduce");
+
+
 
 
         bool display_results = false; // set to true if you want to see the reduced set.
@@ -377,6 +382,7 @@ void print_vector(const vs& V){
 
 void greddy_reduce(vs& V) {
     std::vector<std::vector<int>> adj(V.size());
+    int matrix[V.size()][V.size()];
     for (int i = 0; i < V.size(); i++) {
         std::vector<int> temp;
         adj[i] = temp;
@@ -386,6 +392,7 @@ void greddy_reduce(vs& V) {
             if (can_equate(V[i], V[j])) {
                 adj[i].push_back(j);
                 adj[j].push_back(i);
+                matrix[i][j] = matrix[j][i] = 1;
             }
         }
     }
@@ -401,11 +408,43 @@ void greddy_reduce(vs& V) {
         if (min == 1e9)
             break;
         removed.insert(min);
-        if (degrees[min] != 0) {
+        if (degrees[min] >= 2) {
             // NEEDS WORK
-            int node_to_remove;//pick some node
-            removed.insert(node_to_remove);
-            result.push_back(create_equal(V[min], V[node_to_remove]));
+            // NEEDS TO ADD TO REMOVED
+            // NEED TO ADD TO RESULT
+            int largest_clique = 0; std::vector<int> clique;
+            for (int i = 0; i < adj[min].size(); i++) {
+                for (int j = i+1; j < adj[min].size(); j++) {
+                    std::vector<int> vec;
+                    if (matrix[adj[min][i]][adj[min][j]] == 1) {
+                        vec.push_back(min);vec.push_back(adj[min][i]);vec.push_back(adj[min][j]);
+                        for (int k = j+1; k < adj[min].size(); k++) {
+                            bool correct = true;
+                            for (int viiii = 0; viiii < vec.size(); viiii++) {
+                                if (matrix[adj[vec[viiii]][adj[min][k]]] == 0) {
+                                    correct = false;
+                                }
+                            }
+                            if (correct) vec.push_back(adj[min][k]);
+                        }
+                        if (vec.size() > largest_clique) {
+                            largest_clique = vec.size();
+                            clique = vec;
+                        }
+                    }
+                }
+            }
+            string resultt = V[min];
+            for (int i = 1; i < clique.size(); i++) {
+                resultt = create_equal(resultt, V[clique[i]]);
+                degrees[clique[i]] = 1e9;
+                removed.insert(clique[i]);
+            }
+            result.push_back(resultt);
+        } else if (degrees[min] == 1) {
+            result.push_back(create_equal(V[min], V[adj[min][0]]));
+            removed.insert(adj[min][0]);
+            degrees[adj[min][0]] = 1e9;
         } else {
             result.push_back(V[min]);
         }
