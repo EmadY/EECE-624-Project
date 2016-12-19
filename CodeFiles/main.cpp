@@ -38,7 +38,7 @@ void print_vector(const vs&);
 void delete_trie(TrieNode*);
 inline bool bit(int, int);
 
-const bool USE_BRUTE_FORCE = true; // minimize start time when brute force not required
+const bool USE_BRUTE_FORCE = false; // minimize start time when brute force not required
 const int DP_LEN = USE_BRUTE_FORCE ? 33554432 : 10;
 int DP[DP_LEN]; // dp for brute force method
 vs DPvs[DP_LEN];
@@ -49,7 +49,7 @@ int main() {
 
     std::srand ( unsigned ( std::time(0) ) );
 
-    bool custom_in = true; // change if you want to test on a specific vector
+    bool custom_in = false; // change if you want to test on a specific vector
 
     vector< vs > V;
 
@@ -81,7 +81,7 @@ int main() {
         // unless you want to compare.
 
         // brute_force_reduce
-        vectors.push_back(vs(V[vi])); check_reduce.push_back(true);
+        vectors.push_back(vs(V[vi])); check_reduce.push_back(false);
         functions.push_back(bind(&brute_force_reduce, _1));
         function_name.push_back("Brute Force");
 

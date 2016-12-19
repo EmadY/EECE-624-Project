@@ -1,0 +1,21 @@
+﻿Final pre-Itani push
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Changes to be committed:
+#	modified:   CodeFiles/main.cpp
+#	new file:   CodeFiles/newout.txt
+#	new file:   CodeFiles/out.txt
+#	new file:   CodeFiles/run.cpp
+#	modified:   default.cshtml
+#	modified:   out.txt
+#	deleted:    run.exe
+#	new file:   simulation.cshtml
+#	deleted:    tyrlkrel.e3e.txt
+#
+# Changes not staged for commit:
+#	deleted:    index.html
+#	deleted:    simulation.html
+#
+

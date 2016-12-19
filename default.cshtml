@@ -1,3 +1,40 @@
+@using System;
+@using System.Diagnostics;
+@using System.ComponentModel;
+@{
+    string add = "";
+    string[] fout = new string[10];
+    string[] sout = new string[5];
+    if(IsPost){
+        System.Diagnostics.Process process = new System.Diagnostics.Process();
+        System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+        startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+        string[] vecs = Request["vectors"].ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+        add = "1 " + vecs.Length + " ";
+        foreach(var v in vecs){
+            add += v + " ";
+        }
+        startInfo.FileName = "cmd.exe";
+        startInfo.Arguments = "/C g++ C:/Programming/624/Project/CodeFiles/run.cpp -o C:/Programming/624/Project/run -std=c++11 && C:/Programming/624/Project/run.exe " + add;
+        process.StartInfo = startInfo;
+        process.Start();        
+        process.WaitForExit();
+        <text>@process.ExitCode</text>
+        System.IO.StreamReader file = new System.IO.StreamReader("c:/Programming/624/Project/CodeFiles/newout.txt");
+        string line;
+        for(int i = 0; i < 5; i++){
+            fout[i] = file.ReadLine();
+            fout[i+5] = file.ReadLine();
+            string to_out = "";
+            for(int j = 0; j < fout[i].AsInt(); j++){
+                to_out += file.ReadLine() + "\n";
+            }
+            sout[i] = to_out;
+        }
+        file.Close();
+    }
+}
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
@@ -33,7 +70,7 @@
 							<div id="sitemenu-content">
 								<ul>
 									<li class="i1 o last-item last currentPage"><a><span class="in">Home</span></a></li>
-									<li onclick="location.href='simulation.html';"class="i1 o last-item last currentPage"><a><span class="in">simulation</span></a></li>
+									<li onclick="location.href='simulation.cshtml';"class="i1 o last-item last currentPage"><a><span class="in">simulation</span></a></li>
 								</ul>
 							</div> <!-- /sitemenu-content -->
 						</div> <!-- /sitemenu -->
@@ -124,9 +161,10 @@
 														    </head>
 														    <body>
 														        <div class="poly_type">
+                                                                    <form method="post" action="">
 														            <h3 style = "margin-left: 10%; color:#63b8ee;" >Enter the input vectors (one per line): </h3>
 																				<span style="width: 80%; margin-left: 10%; float: left;">
-																				<textarea type="text" name="Message" size="20" style="width:470px; height:60px; font-family: 'Courier New'; padding: 5px;" placeholder="Enter list of vectors here"></textarea>
+																				<textarea type="text" name="vectors" size="20" style="width:470px; height:60px; font-family: 'Courier New'; padding: 5px;" placeholder="Enter list of vectors here"></textarea>
 																				</span>
 																				<br/>
 
@@ -138,14 +176,14 @@
 																				<br/>
 
 
-																				<input type="button" href="#" class="myButton" for="Fillbutton" style="width:23%; margin-right: 37%; float: right; text-align: center; color: #ffffff" value="Reduce"/>
+																				<input type="submit" href="#" class="myButton" for="Fillbutton" style="width:23%; margin-right: 37%; float: right; text-align: center; color: #ffffff" value="Reduce"/>
 
 																				<hr/><br/>
-
+</form>
 														        </div>
 
 
-														<style>th {width: 16%; }</style>
+<style>th {width: 16%; }</style>
 
 																		<table style="width:85%; margin-right: 7%; margin-left: 7%;float: left;">
 																		  <tr>
@@ -158,19 +196,19 @@
 																		  </tr>
 																		  <tr>
 																		    <td>Reduced Set Size</td>
-																		    <td></td>
-																		    <td></td>
-																			<td></td>
-																			<td></td>
-																			<td></td>
+																		    <td>@fout[0]</td>
+																		    <td>@fout[1]</td>
+																			<td>@fout[2]</td>
+																			<td>@fout[3]</td>
+																			<td>@fout[4]</td>
 																	  	</tr>
 																		  <tr>
 																		    <td>Time to compute result</td>
-																		    <td></td>
-																		    <td></td>
-																			<td></td>
-																			<td></td>
-																			<td></td>
+																		    <td>@fout[5]</td>
+																		    <td>@fout[6]</td>
+																			<td>@fout[7]</td>
+																			<td>@fout[8]</td>
+																			<td>@fout[9]</td>
 																	  	</tr>
 																		</table>
 
@@ -178,14 +216,14 @@
 
 
 																		<ul style="width: 80%; margin-left: 10%; float: left;" href="#" class="tab" src="tab.js">
-																			<li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Thingy1')" id="defaultOpen" >Thingy1</a>
+																			<li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Thingy1')" id="defaultOpen" >Brute Force</a>
 																			</li>
 
 
-																			<li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Thingy2')">Thingy2</a></li>
-																			<li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Thingy3')">Thingy3</a></li>
-																			<li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Thingy4')">Thingy4</a></li>
-																			<li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Thingy5')">Thingy5</a></li>
+																			<li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Thingy2')">Join2</a></li>
+																			<li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Thingy3')">Multiple Join2</a></li>
+																			<li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Thingy4')">TriReduce</a></li>
+																			<li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Thingy5')">Graph Reduce</a></li>
 
 																		</ul>
 
@@ -193,34 +231,34 @@
 
 																		<div id="Thingy2" class="tabcontent">
 
-																			<fieldset  style="width: 100%;">
-																				<textarea style="width:90%; margin-left: 4%; margin-right: 4%;" disabled/></textarea>
+																			<fieldset  style="width: 100%;"> 
+																				<textarea style="width:90%; margin-left: 4%; margin-right: 4%;" rows="@fout[1]" style="font-family: 'Courier New';" disabled/>@sout[1]</textarea>
 																			</fieldset>
 																		</div>
 
 																		<div id="Thingy1" class="tabcontent">
 																			<fieldset  style="width: 100%;">
-																				<textarea style="width:90%; margin-left: 4%; margin-right: 4%;" disabled/></textarea>
+																				<textarea style="width:90%; margin-left: 4%; margin-right: 4%;" rows="@fout[0]" style="font-family: 'Courier New';" disabled/>@sout[0]</textarea>
 																			</fieldset>
 																		</div>
 
 																		<div id="Thingy4" class="tabcontent">
 
 																			<fieldset  style="width: 100%;">
-																				<textarea style="width:90%; margin-left: 4%; margin-right: 4%;" disabled/></textarea>
+																				<textarea style="width:90%; margin-left: 4%; margin-right: 4%;" rows="@fout[3]" style="font-family: 'Courier New';" disabled/>@sout[3]</textarea>
 																			</fieldset>
 																		</div>
 
 																		<div id="Thingy5" class="tabcontent">
 																			<fieldset  style="width: 100%;">
-																				<textarea style="width:90%; margin-left: 4%; margin-right: 4%;" disabled/></textarea>
+																				<textarea style="width:90%; margin-left: 4%; margin-right: 4%;" rows="@fout[4]" style="font-family: 'Courier New';" disabled/>@sout[4]</textarea>
 																			</fieldset>
 																		</div>
 
 																		<div id="Thingy3" class="tabcontent">
 
 																			<fieldset  style="width: 100%;">
-																				<textarea style="width:90%; margin-left: 4%; margin-right: 4%;" disabled/></textarea>
+																				<textarea style="width:90%; margin-left: 4%; margin-right: 4%;" rows="@fout[2]" disabled/>@sout[2]</textarea>
 																			</fieldset>
 																		</div>
 
