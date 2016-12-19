@@ -46,6 +46,8 @@ int main() {
     // Note: to reduce startup time when you DO NOT want to test brute force
     // set USE_BRUTE_FORCE to false above.
 
+    ofstream cout; cout.open("out.txt");
+
     std::srand ( unsigned ( std::time(0) ) );
 
     bool custom_in = false; // change if you want to test on a specific vector
@@ -120,6 +122,8 @@ int main() {
         cout << endl;
     }
 
+
+    cout.close();
     return 0;
 }
 

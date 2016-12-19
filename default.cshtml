@@ -1,0 +1,286 @@
+@using System;
+@using System.Diagnostics;
+@using System.ComponentModel;
+@{
+
+System.Diagnostics.Process process = new System.Diagnostics.Process();
+System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+startInfo.FileName = "cmd.exe";
+startInfo.Arguments = "g++ CodeFiles/main.cpp -o run -std=c++11 && ./run";
+process.StartInfo = startInfo;
+process.Start();
+}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+				<title>The Project | EECE 624 Project</title>
+		<meta name="robots" content="all" />
+		<meta name="generator" content="Sandvox 2.10.6" />
+		<meta name="viewport" content="width=960" />
+		<link rel="canonical" href="http://455.com/" />
+
+		<link rel="stylesheet" type="text/css" href="sandvox_Blueprint_modern/main.css" title="Blueprint Modern" /><!--[if IE 6]>
+		<link rel="stylesheet" type="text/css" href="sandvox_Blueprint_modern/ie6.css" /><![endif]--><!--[if IE 7]>
+		<link rel="stylesheet" type="text/css" href="sandvox_Blueprint_modern/ie7.css" /><![endif]-->
+		<!--
+		Photo credits for this website's design: <http://455.com/sandvox_Blueprint_modern/Credits.rtf>
+		Licensing for this website's design:     <http://455.com/sandvox_Blueprint_modern/License.rtf>
+		-->
+		<script src="tab.js"></script>
+		<link rel="stylesheet" type="text/css" href="tab.css">
+	</head>
+	<body class="sandvox has-page-title allow-sidebar no-custom-banner home-page no-IR" id="host_455_com" >
+				<div id="page-container">
+			<div id="page">
+				<div id="page-top" class="no-logo has-title has-tagline">
+					<div id="title">
+						<h1 class="title"><span class="in">EECE 624 Project</span></h1>
+						<p id="tagline"><span class="in">Digital System Testing</span></p>
+					</div><!-- title -->
+					<div id="sitemenu-container">
+						<div id="sitemenu">
+							<h2 class="hidden">Site Navigation<a href="#page-content" rel="nofollow">[Skip]</a></h2>
+							<div id="sitemenu-content">
+								<ul>
+									<li class="i1 o last-item last currentPage"><a><span class="in">Home</span></a></li>
+									<li onclick="location.href='simulation.html';"class="i1 o last-item last currentPage"><a><span class="in">simulation</span></a></li>
+								</ul>
+							</div> <!-- /sitemenu-content -->
+						</div> <!-- /sitemenu -->
+					</div> <!-- sitemenu-container -->
+				</div> <!-- page-top -->
+				<div class="clear below-page-top"></div>
+				<div id="page-content" class="">
+					<div id="sidebar-container">
+						<div id="sidebar">
+							<div id="sidebar-top"></div>
+							<div id="sidebar-content">
+								<h3 class="hidden">Sidebar<a rel="nofollow" href="#main">[Skip]</a></h3>
+								<div class="pagelet titled i1 o">
+									<h4 class="title pagelet-title"><span class="in">Project DESCRIPTION</span></h4>
+									<div class="pagelet-body">
+										<div class="RichTextElement">
+											<div>
+												<p><span style="font-size: 11pt; font-family: Calibri; font-weight: 700;">Project 624
+												</span></p>
+												<p><span style="font-size: 11pt; font-family: Calibri;">Given a set of vectors that contain don't care bits, output a new set that covers the inital one
+													 that also minimizes the number of vectors (by assigning X's).
+													<br/>
+													<br/>
+													To solve this, we proposed 4 different methods:
+													<ul>
+														<li>Join2 Rduction</li>
+														<li>Multiple Join2 Reduction</li>
+														<li>Tri-based Reduction</li>
+														<li>Graph-based Reduction</li>
+													</ul>
+												</span></p>
+
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="pagelet titled i3 o last-item">
+									<h4 class="title pagelet-title"><span class="in">Team Members</span></h4>
+									<div class="pagelet-body">
+										<div class="RichTextElement">
+											<div>
+												<ul>
+												<li>
+													<span style="color: rgb(0, 0, 0);">Mohamad-Ali itani</span>
+												</li>
+												<li>
+													<span style="color: rgb(0, 0, 0);">Mohamad-Ghazi Raad</span>
+												</li>
+												<li>
+													<span style="color: rgb(0, 0, 0);">Emad Yehya</span>
+												</li>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div> <!-- sidebar-content -->
+							<div id="sidebar-bottom"></div>
+						</div> <!-- sidebar -->
+					</div> <!-- sidebar-container -->
+					<div id="main">
+						<div id="main-top"></div>
+						<div id="main-content">
+							<h2 class="title"><span class="in">The Project</span></h2>
+							<div class="article">
+								<div class="article-content">
+									<div class="RichTextElement">
+										<div>
+											<div class="first wide center">
+												<div style="" class="graphic">
+													<div class="figure-content HTMLElement">
+
+
+														<!DOCTYPE html>
+
+														<html lang="en">
+														    <head>
+														        <meta charset="utf-8" />
+														        <title>EECE 624 Project</title>
+														        <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+														        <link rel="stylesheet" type="text/css" href="mybutton.css"/>
+
+														        <script type="text/javascript">
+
+
+
+														        </script>
+														    </head>
+														    <body>
+														        <div class="poly_type">
+														            <h3 style = "margin-left: 10%; color:#63b8ee;" >Enter the input vectors (one per line): </h3>
+																				<span style="width: 80%; margin-left: 10%; float: left;">
+																				<textarea type="text" name="Message" size="20" style="width:470px; height:60px; font-family: 'Courier New'; padding: 5px;" placeholder="Enter list of vectors here"></textarea>
+																				</span>
+																				<br/>
+
+
+																				<br/>
+																				<br/>
+																				<br/>
+																				<br/>
+																				<br/>
+
+
+																				<input type="button" href="#" class="myButton" for="Fillbutton" style="width:23%; margin-right: 37%; float: right; text-align: center; color: #ffffff" value="Reduce"/>
+
+																				<hr/><br/>
+
+														        </div>
+
+
+<style>th {width: 16%; }</style>
+
+																		<table style="width:85%; margin-right: 7%; margin-left: 7%;float: left;">
+																		  <tr>
+																		    <th></th>
+																		    <th>Brute Force</th>
+																		    <th>Join2</th>
+																			<th>Multiple Join2</th>
+																			<th>Tri Reduce</th>
+																			<th>Graph Reduce</th>
+																		  </tr>
+																		  <tr>
+																		    <td>Reduced Set Size</td>
+																		    <td></td>
+																		    <td></td>
+																			<td></td>
+																			<td></td>
+																			<td></td>
+																	  	</tr>
+																		  <tr>
+																		    <td>Time to compute result</td>
+																		    <td></td>
+																		    <td></td>
+																			<td></td>
+																			<td></td>
+																			<td></td>
+																	  	</tr>
+																		</table>
+
+
+
+
+																		<ul style="width: 80%; margin-left: 10%; float: left;" href="#" class="tab" src="tab.js">
+																			<li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Thingy1')" id="defaultOpen" >Thingy1</a>
+																			</li>
+
+
+																			<li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Thingy2')">Thingy2</a></li>
+																			<li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Thingy3')">Thingy3</a></li>
+																			<li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Thingy4')">Thingy4</a></li>
+																			<li><a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Thingy5')">Thingy5</a></li>
+
+																		</ul>
+
+
+
+																		<div id="Thingy2" class="tabcontent">
+
+																			<fieldset  style="width: 100%;">
+																				<textarea style="width:90%; margin-left: 4%; margin-right: 4%;" disabled/></textarea>
+																			</fieldset>
+																		</div>
+
+																		<div id="Thingy1" class="tabcontent">
+																			<fieldset  style="width: 100%;">
+																				<textarea style="width:90%; margin-left: 4%; margin-right: 4%;" disabled/></textarea>
+																			</fieldset>
+																		</div>
+
+																		<div id="Thingy4" class="tabcontent">
+
+																			<fieldset  style="width: 100%;">
+																				<textarea style="width:90%; margin-left: 4%; margin-right: 4%;" disabled/></textarea>
+																			</fieldset>
+																		</div>
+
+																		<div id="Thingy5" class="tabcontent">
+																			<fieldset  style="width: 100%;">
+																				<textarea style="width:90%; margin-left: 4%; margin-right: 4%;" disabled/></textarea>
+																			</fieldset>
+																		</div>
+
+																		<div id="Thingy3" class="tabcontent">
+
+																			<fieldset  style="width: 100%;">
+																				<textarea style="width:90%; margin-left: 4%; margin-right: 4%;" disabled/></textarea>
+																			</fieldset>
+																		</div>
+
+
+
+
+
+
+														    </body>
+														</html>
+													</div>
+												</div>
+											</div>
+											<p><br /></p>
+
+										</div>
+									</div>
+								</div> <!-- /article-content -->
+								<div class="article-info">
+								</div> <!-- /article-info -->
+							</div> <!-- /article -->
+						</div> <!-- main-content -->
+						<div id="main-bottom"></div>
+					</div> <!-- main -->
+				</div> <!-- content -->
+				<div class="clear below-content"></div>
+				<div id="page-bottom">
+					<div id="page-bottom-contents">
+						<div><br /></div>
+						<div class="hidden"> <a rel="nofollow" href="#title">[Back To Top]</a></div>
+					</div>
+				</div> <!-- page-bottom -->
+			</div> <!-- container -->
+			<div id="extraDiv1"><span></span></div><div id="extraDiv2"><span></span></div><div id="extraDiv3"><span></span></div><div id="extraDiv4"><span></span></div><div id="extraDiv5"><span></span></div><div id="extraDiv6"><span></span></div>
+		</div> <!-- specific body type -->
+		<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+		<script>
+		if (typeof jQuery === 'undefined') document.write('<scr'+'ipt src="_Resources/jquery-1.9.1.min.js"></scr'+'ipt>');
+		</script>
+		<script charset="utf-8" src="sandvox_Blueprint_modern/javascript.js"></script>
+		<script>
+		$(document).ready(function(){var e=window.devicePixelRatio&&window.devicePixelRatio>1?window.devicePixelRatio:1,t=window.innerWidth>window.innerHeight?screen.height:screen.width;$("span[data-img-src-hr]").each(function(){var n=$(this).data("width"),r=$(this).data("height"),i=$(this).data("alt"),s='<img src="',o=e>1&&n<2*t,u=0,a=$(this)[0].attributes;if(o){s+=$(this).data("img-src-hr")}else{s+=$(this).data("img-src")}s+='"';if(i)s+=' alt="'+i+'"';if(n)s+=' width="'+n+'"';if(r)s+=' height="'+r+'"';for(l=a.length;u<l;u++){var f=a[u].name;if(!f.match(/(data-width|data-height|data-alt|data-img-src)/g)){s+=" "+f+'="'+a[u].value+'"'}}s+=" />";$(this).replaceWith($(s))})})
+		</script>
+		<script>
+		// Get the element width id="defaultOpen" and click on it
+		document.getElementById("defaultOpen").click();
+		</script>
+	</body>
+</html>
